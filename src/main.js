@@ -1,7 +1,7 @@
 require("./style.css");
 
-const {Elm} = require('./Main');
+const { Elm } = require("./elm/Main");
 
 Elm.Main.init({
-    node: document.getElementById('elm-root')
+  node: document.getElementById("elm-root")
 });
