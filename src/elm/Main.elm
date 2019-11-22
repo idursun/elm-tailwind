@@ -3,6 +3,7 @@ module Main exposing (..)
 import Browser
 import Html exposing (Html, a, aside, div, h1, i, img, input, li, nav, span, text, ul)
 import Html.Attributes exposing (class, href, placeholder, src, type_)
+import Html.Events exposing (onClick)
 
 
 
@@ -42,13 +43,19 @@ init =
 ---- UPDATE ----
 
 
+type SidebarMsg
+    = ToggleSidebar
+
+
 type Msg
-    = NoOp
+    = SidebarMsg SidebarMsg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( model, Cmd.none )
+    case msg of
+        SidebarMsg ToggleSidebar ->
+            ( model, Cmd.none )
 
 
 
@@ -71,9 +78,8 @@ navbar =
 sidebar : List SidebarModel -> Html Msg
 sidebar models =
     aside [ class "flex-none w-full h-full border-r shadow-lg h-screen bg-gray-800 " ]
-        [ h1 [ class "h-24 text-white tracking-4 uppercase font-bold p-4 text-left text-middle leading-lg text-lg" ]
-            [ text "Some academy" ]
-        , h1 [] (models |> List.map (\x -> sidebarSection x.name x.items False))
+        [ h1 [ class "h-24 text-white tracking-4 uppercase font-bold p-4 text-left text-middle leading-lg text-lg" ] [ text "Some academy" ]
+        , div [] (List.map sidebarSection models)
         ]
 
 
@@ -87,14 +93,9 @@ sidebarSectionHeader header collapsed =
             else
                 "flex-none fa fa-chevron-down"
     in
-    div [ class "flex items-center font-bold text-gray-500 uppercase pb-2 px-2" ]
-        [ i [ class "flex-none" ]
-            []
-        , span [ class "flex-grow mx-1 select-none" ]
-            [ text header ]
-        , i [ class chevronStyle ]
-            []
-        , text ""
+    div [ class "flex items-center font-bold text-gray-500 uppercase pb-2 px-2", onClick (SidebarMsg ToggleSidebar) ]
+        [ span [ class "flex-grow mx-2 select-none" ] [ text header ]
+        , i [ class chevronStyle ] []
         ]
 
 
@@ -105,16 +106,16 @@ sidebarSectionItem { name, link } =
         ]
 
 
-sidebarSection : String -> List SidebarItem -> Bool -> Html Msg
-sidebarSection header items collapsed =
+sidebarSection : SidebarModel -> Html Msg
+sidebarSection model =
     div [ class "m-2 my-3" ]
-        [ sidebarSectionHeader header collapsed
+        [ sidebarSectionHeader model.name model.collapsed
         , ul [ class "list-reset" ]
-            (if collapsed then
+            (if model.collapsed then
                 []
 
              else
-                List.map sidebarSectionItem items
+                List.map sidebarSectionItem model.items
             )
         ]
 
