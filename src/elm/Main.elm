@@ -11,7 +11,7 @@ import Html.Events exposing (onClick)
 
 
 type alias Model =
-    { sidebar : List SidebarModel
+    { sidebars : List SidebarModel
     }
 
 
@@ -21,8 +21,13 @@ type alias SidebarItem =
     }
 
 
+type alias SidebarId =
+    String
+
+
 type alias SidebarModel =
-    { name : String
+    { id : SidebarId
+    , name : String
     , items : List SidebarItem
     , collapsed : Bool
     }
@@ -31,9 +36,9 @@ type alias SidebarModel =
 init : ( Model, Cmd Msg )
 init =
     ( Model
-        [ SidebarModel "Repositories" [ SidebarItem "Item1" "#", SidebarItem "Item2" "#" ] False
-        , SidebarModel "Items" [ SidebarItem "Item1" "#", SidebarItem "Item2" "#" ] False
-        , SidebarModel "Services" [ SidebarItem "Item1" "#", SidebarItem "Item2" "#" ] False
+        [ SidebarModel "repositories" "Repositories" [ SidebarItem "Item1" "#", SidebarItem "Item2" "#" ] False
+        , SidebarModel "items" "Items" [ SidebarItem "Item1" "#", SidebarItem "Item2" "#" ] False
+        , SidebarModel "services " "Services" [ SidebarItem "Item1" "#", SidebarItem "Item2" "#" ] False
         ]
     , Cmd.none
     )
@@ -44,7 +49,7 @@ init =
 
 
 type SidebarMsg
-    = ToggleSidebar
+    = ToggleSidebar SidebarId
 
 
 type Msg
@@ -54,8 +59,19 @@ type Msg
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        SidebarMsg ToggleSidebar ->
-            ( model, Cmd.none )
+        SidebarMsg m ->
+            ( { model | sidebars = List.map (updateSidebar m) model.sidebars }, Cmd.none )
+
+
+updateSidebar : SidebarMsg -> SidebarModel -> SidebarModel
+updateSidebar msg model =
+    case msg of
+        ToggleSidebar index ->
+            if index == model.id then
+                { model | collapsed = not model.collapsed }
+
+            else
+                model
 
 
 
@@ -83,18 +99,18 @@ sidebar models =
         ]
 
 
-sidebarSectionHeader : String -> Bool -> Html Msg
-sidebarSectionHeader header collapsed =
+sidebarSectionHeader : SidebarModel -> Html Msg
+sidebarSectionHeader model =
     let
         chevronStyle =
-            if collapsed then
+            if model.collapsed then
                 "flex-none fa fa-chevron-right"
 
             else
                 "flex-none fa fa-chevron-down"
     in
-    div [ class "flex items-center font-bold text-gray-500 uppercase pb-2 px-2", onClick (SidebarMsg ToggleSidebar) ]
-        [ span [ class "flex-grow mx-2 select-none" ] [ text header ]
+    div [ class "flex items-center font-bold text-gray-500 uppercase pb-2 px-2", onClick (SidebarMsg (ToggleSidebar model.id)) ]
+        [ span [ class "flex-grow mx-2 select-none" ] [ text model.name ]
         , i [ class chevronStyle ] []
         ]
 
@@ -109,7 +125,7 @@ sidebarSectionItem { name, link } =
 sidebarSection : SidebarModel -> Html Msg
 sidebarSection model =
     div [ class "m-2 my-3" ]
-        [ sidebarSectionHeader model.name model.collapsed
+        [ sidebarSectionHeader model
         , ul [ class "list-reset" ]
             (if model.collapsed then
                 []
@@ -125,7 +141,7 @@ view model =
     div [ class "w-full" ]
         [ div [ class "flex" ]
             [ div [ class "flex-none w-64" ]
-                [ sidebar model.sidebar
+                [ sidebar model.sidebars
                 ]
             , div [ class "flex-grow" ]
                 [ navbar
