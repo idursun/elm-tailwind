@@ -21,6 +21,7 @@ type alias Course =
 type alias Model =
     { sidebars : List SidebarModel
     , courses : List Course
+    , searchText : Maybe String
     }
 
 
@@ -35,6 +36,7 @@ init =
         , Course 2 "test 2" 200.0
         , Course 3 "Essenstials 2" 400.0
         ]
+        Nothing
     , Cmd.none
     )
 
@@ -59,7 +61,9 @@ update msg model =
             ( { model | sidebars = List.map (updateSidebar m) model.sidebars }, Cmd.none )
 
         NavbarMsg m ->
-            ( model, Cmd.none )
+            case m of
+                SearchInput input ->
+                    ( { model | searchText = Just input }, Cmd.none )
 
 
 
@@ -81,6 +85,15 @@ navbar =
 
 view : Model -> Html Msg
 view model =
+    let
+        courses =
+            case model.searchText of
+                Just filterText ->
+                    List.filter (\x -> String.contains (String.toUpper filterText) (String.toUpper x.title)) model.courses
+
+                Nothing ->
+                    model.courses
+    in
     div [ class "w-full" ]
         [ div [ class "flex" ]
             [ div [ class "flex-none w-64" ]
@@ -90,7 +103,7 @@ view model =
                 [ div [ class "flex-grow" ]
                     [ navbar
                     ]
-                , div [] (List.map viewCourse model.courses)
+                , div [] (List.map viewCourse courses)
                 ]
             ]
         ]
