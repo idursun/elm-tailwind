@@ -1,7 +1,7 @@
 module Main exposing (..)
 
 import Browser
-import Html exposing (Html, div, input, nav, text)
+import Html exposing (Html, div, h1, input, nav, span, text)
 import Html.Attributes exposing (class, placeholder, type_)
 import Html.Events exposing (onInput)
 import Sidebar exposing (SidebarItem, SidebarModel, SidebarMsg, sidebar, updateSidebar)
@@ -34,7 +34,7 @@ init =
         ]
         [ Course 1 "test" 100.0
         , Course 2 "test 2" 200.0
-        , Course 3 "Essenstials 2" 400.0
+        , Course 3 "Essentials 2" 400.0
         ]
         Nothing
     , Cmd.none
@@ -103,7 +103,7 @@ view model =
                 [ div [ class "flex-grow" ]
                     [ navbar
                     ]
-                , div [] (List.map viewCourse courses)
+                , div [ class "flex" ] (List.map viewCourse courses)
                 ]
             ]
         ]
@@ -111,7 +111,13 @@ view model =
 
 viewCourse : Course -> Html Msg
 viewCourse course =
-    div [ class "w-full p-2 m-2 rounded shadow" ] [ text course.title ]
+    div [ class "m-2 p-2 shadow" ]
+        [ h1 [ class "text-xl font-semibold tracking-wide leading-loose" ] [ text (course.title ++ " Some") ]
+        , div []
+            [ span [ class "text-sm text-gray-800" ] [ text "Price:" ]
+            , span [ class "font-semibold text-sm text-gray-800" ] [ text "100$" ]
+            ]
+        ]
 
 
 
