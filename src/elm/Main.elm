@@ -31,6 +31,10 @@ init =
         , SidebarModel "items" "Items" [ SidebarItem "Item1" "#", SidebarItem "Item2" "#" ] False
         , SidebarModel "services " "Services" [ SidebarItem "Item1" "#", SidebarItem "Item2" "#" ] False
         ]
+        [ Course 1 "test" 100.0
+        , Course 2 "test 2" 200.0
+        , Course 3 "Essenstials 2" 400.0
+        ]
     , Cmd.none
     )
 
@@ -83,10 +87,18 @@ view model =
                 [ Html.map SidebarMsg (sidebar model.sidebars)
                 ]
             , div [ class "flex-grow" ]
-                [ navbar
+                [ div [ class "flex-grow" ]
+                    [ navbar
+                    ]
+                , div [] (List.map viewCourse model.courses)
                 ]
             ]
         ]
+
+
+viewCourse : Course -> Html Msg
+viewCourse course =
+    div [ class "w-full p-2 m-2 rounded shadow" ] [ text course.title ]
 
 
 
