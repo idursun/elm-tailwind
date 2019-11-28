@@ -56,8 +56,9 @@ sidebarSectionHeader model =
             else
                 "flex-none fa fa-chevron-down"
     in
-    div [ class "flex items-center font-bold text-gray-500 uppercase pb-2 px-2", onClick (ToggleSidebar model.id) ]
-        [ span [ class "flex-grow mx-2 select-none" ] [ text model.name ]
+    div [ class "flex items-center font-bold text-gray-500 uppercase pb-2 px-2 cursor-pointer", onClick (ToggleSidebar model.id) ]
+        [ i [ class chevronStyle ] []
+        , span [ class "flex-grow mx-2 select-none" ] [ text model.name ]
         , i [ class chevronStyle ] []
         ]
 
