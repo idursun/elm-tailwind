@@ -1,8 +1,5 @@
 module.exports = {
   theme: {
-    fontFamily: {
-      body: ["Roboto", "Times New Roman"]
-    },
     extend: {
       colors: {
         coldblue: {

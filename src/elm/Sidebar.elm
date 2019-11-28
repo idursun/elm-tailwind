@@ -18,6 +18,7 @@ type alias SidebarItem =
 type alias SidebarModel =
     { id : SidebarId
     , name : String
+    , icon : String
     , items : List SidebarItem
     , collapsed : Bool
     }
@@ -57,7 +58,7 @@ sidebarSectionHeader model =
                 "flex-none fa fa-chevron-down"
     in
     div [ class "flex items-center font-bold text-gray-500 uppercase pb-2 px-2 cursor-pointer", onClick <| ToggleSidebar model.id ]
-        [ i [ class chevronStyle ] []
+        [ i [ class ("fa " ++ model.icon) ] []
         , span [ class "flex-grow mx-2 select-none" ] [ text model.name ]
         , i [ class chevronStyle ] []
         ]

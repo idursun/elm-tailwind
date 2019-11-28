@@ -28,9 +28,9 @@ type alias Model =
 init : ( Model, Cmd Msg )
 init =
     ( Model
-        [ SidebarModel "repositories" "Repositories" [ SidebarItem "Item1" "#", SidebarItem "Item2" "#" ] False
-        , SidebarModel "items" "Items" [ SidebarItem "Item1" "#", SidebarItem "Item2" "#" ] False
-        , SidebarModel "services " "Services" [ SidebarItem "Item1" "#", SidebarItem "Item2" "#" ] False
+        [ { id = "repositories", name = "Repositories", icon = "fa-archive", items = [ SidebarItem "Item1" "#", SidebarItem "Item2" "#" ], collapsed = False }
+        , { id = "items", name = "Items", icon = "fa-gears", items = [ SidebarItem "Item1" "#", SidebarItem "Item2" "#" ], collapsed = False }
+        , { id = "services", name = "Services", icon = "fa-gear", items = [ SidebarItem "Item1" "#", SidebarItem "Item2" "#" ], collapsed = False }
         ]
         [ Course 1 "test" 100.0
         , Course 2 "test 2" 200.0
