@@ -11,8 +11,12 @@ import Sidebar exposing (SidebarItem, SidebarModel, SidebarMsg, sidebar, updateS
 ---- MODEL ----
 
 
+type CourseId
+    = CourseId Int
+
+
 type alias Course =
-    { id : Int
+    { id : CourseId
     , title : String
     , price : Float
     }
@@ -32,9 +36,13 @@ init =
         , { id = "items", name = "Items", icon = "fa-gears", items = [ SidebarItem "Item1" "#", SidebarItem "Item2" "#" ], collapsed = False }
         , { id = "services", name = "Services", icon = "fa-gear", items = [ SidebarItem "Item1" "#", SidebarItem "Item2" "#" ], collapsed = False }
         ]
-        [ Course 1 "test" 100.0
-        , Course 2 "test 2" 200.0
-        , Course 3 "Essentials 2" 400.0
+        [ Course (CourseId 1) "test" 100.0
+        , Course (CourseId 2) "test 2" 200.0
+        , Course (CourseId 3) "Essentials 2" 400.0
+        , Course (CourseId 4) "Essentials 2" 400.0
+        , Course (CourseId 5) "Essentials 2" 450.0
+        , Course (CourseId 6) "Essentials 2" 400.0
+        , Course (CourseId 7) "Essentials 2" 200.0
         ]
         Nothing
     , Cmd.none
